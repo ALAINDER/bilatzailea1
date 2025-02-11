@@ -224,6 +224,9 @@ clearHistoryButton.addEventListener('click', () => {
 
 // Settings Modal functionality
 settingsButton.addEventListener('click', () => {
+    if (quickDropdown.classList.contains('visible')) {
+        quickDropdown.classList.remove('visible');
+    }
     settingsModal.style.opacity = '1';
     settingsModal.style.visibility = 'visible';
     modalOverlay.classList.add('active');
@@ -272,14 +275,27 @@ const sampleData = [
     'Database Design'
 ];
 
-// Handle input changes
+// Nueva función para obtener sugerencias relacionadas al tema
+function getTopicSuggestions(query) {
+    // Puedes ampliar el array de temas según necesites
+    const topics = ['Tutorial', 'Guía', 'Ejemplo', 'Tips', 'Herramientas', 'Framework', 'Concepto', 'Avanzado', 'Básico'];
+    // Generar sugerencias combinando el query y cada tema
+    return topics.map(topic => `${query} ${topic}`);
+}
+
+// Modificar event listener de searchInput para mostrar más sugerencias sobre el tema
 searchInput.addEventListener('input', (e) => {
     const value = e.target.value.toLowerCase();
     if (value.length > 0) {
+        // Sugerencias que contienen el query
         const filteredSuggestions = sampleData.filter(item => 
             item.toLowerCase().includes(value)
         );
-        displaySuggestions(filteredSuggestions);
+        // Sugerencias adicionales basadas en el tema
+        const topicSuggestions = getTopicSuggestions(value);
+        // Combinar y eliminar duplicados
+        const allSuggestions = [...new Set([...filteredSuggestions, ...topicSuggestions])];
+        displaySuggestions(allSuggestions);
     } else {
         clearSuggestions();
     }
@@ -494,8 +510,9 @@ const quickAnimations = document.getElementById('quick-animations');
 let hoverTimer;
 let hideTimer;
 
-// Al pasar el mouse sobre settingsButton se muestra el dropdown tras 500ms
+// Al pasar el mouse sobre settingsButton se muestra el dropdown tras 500ms, pero solo si no se están mostrando los ajustes
 settingsButton.addEventListener('mouseenter', () => {
+    if (settingsModal.style.visibility === 'visible') return; // Evita abrir el desplegable rápido si los ajustes están abiertos
     clearTimeout(hideTimer);
     hoverTimer = setTimeout(() => {
         quickDropdown.classList.add('visible');
@@ -532,6 +549,7 @@ quickTheme.addEventListener('change', () => {
     applyTheme(quickTheme.value);
     localStorage.setItem('themePreference', quickTheme.value);
     themeSelect.value = quickTheme.value; // Sincroniza con ajustes principales
+    updateThemeSwitchIcon(); // Actualiza el icono del tema
 });
 quickNewTab.addEventListener('change', () => {
     localStorage.setItem('openInNewTab', quickNewTab.checked);
@@ -610,6 +628,9 @@ autoClickQuickSettings.forEach(qs => {
 
 // Modificar el comportamiento del auto-click para añadir el delay entre clicks
 function addAutoClickWithDelay(element, callback, delay = 600) {
+    if (element.classList && element.classList.contains('suggestion-item')) {
+        return;
+    }
     let canClick = true;
     let timer;
 
@@ -1083,4 +1104,47 @@ function updateUILanguage() {
     // Actualizar botones
     document.getElementById('edit-engine-order').textContent = trans.editOrder;
     document.querySelector('.save-engine-selection').textContent = trans.save;
+}
+
+// Modificar displaySuggestions para asignar variantes aleatorias a cada sugerencia
+function displaySuggestions(items) {
+    suggestions.innerHTML = '';
+    const limit = parseInt(suggestionsLimitInput.value);
+    items = items.slice(0, limit);
+    items.forEach(item => {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.classList.add('suggestion-item');
+        // Agregar clase de variante aleatoria (ej.: variant-1, variant-2 o variant-3)
+        const variant = 'variant-' + (Math.floor(Math.random() * 3) + 1);
+        suggestionItem.classList.add(variant);
+        suggestionItem.textContent = item;
+        suggestionItem.addEventListener('click', () => {
+            searchInput.value = item;
+            clearSuggestions();
+            performSearch();
+        });
+        suggestions.appendChild(suggestionItem);
+    });
+    suggestions.classList.add('active');
+}
+
+// Modificar addAutoClickWithDelay para que no se aplique a elementos con la clase .suggestion-item
+function addAutoClickWithDelay(element, callback, delay = 600) {
+    if (element.classList && element.classList.contains('suggestion-item')) {
+        return;
+    }
+    let canClick = true;
+    let timer;
+    element.addEventListener('mouseenter', () => {
+        if (canClick) {
+            timer = setTimeout(() => {
+                callback();
+                canClick = false;
+            }, delay);
+        }
+    });
+    element.addEventListener('mouseleave', () => {
+        clearTimeout(timer);
+        canClick = true;
+    });
 }
