@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Interface</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="settings-button">
+        <i class="fas fa-cog"></i>
+    </div>
+    <!-- Quick settings dropdown -->
+    <div class="quick-settings-dropdown">
+        <!-- Ejemplo de ajustes rápidos -->
+        <div class="quick-setting">
+            <label for="quick-theme">Tema</label>
+            <select id="quick-theme">
+                <option value="light">Claro</option>
+                <option value="dark">Oscuro</option>
+            </select>
+        </div>
+        <div class="quick-setting">
+            <label for="quick-new-tab">Nueva pestaña</label>
+            <input type="checkbox" id="quick-new-tab">
+        </div>
+        <!-- Nuevos ajustes rápidos -->
+        <div class="quick-setting">
+            <label for="quick-font-size">Tamaño de fuente</label>
+            <input type="number" id="quick-font-size" min="12" max="24" value="16">
+        </div>
+        <div class="quick-setting">
+            <input type="checkbox" id="quick-animations">
+            <label for="quick-animations">Activar animaciones</label>
+        </div>
+    </div>
+
+    <div class="theme-switch">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <div class="search-engines">
+        <button class="engine-button active bordered-button" data-engine="google">
+            <i class="fab fa-google"></i> Google
+        </button>
+        <button class="engine-button bordered-button" data-engine="bing">
+            <i class="fab fa-microsoft"></i> Bing
+        </button>
+        <button class="engine-button bordered-button" data-engine="duckduckgo">
+            <i class="fas fa-duck"></i> DuckDuckGo
+        </button>
+        <button class="add-engine-button bordered-button">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" data-translate="searchPlaceholder" placeholder="Type to search...">
+            <button class="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div class="suggestions">
+            <!-- Suggestions will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="history-panel">
+        <button class="history-toggle bordered-button">
+            <i class="fas fa-history"></i>
+        </button>
+        <div class="history-title">
+            <span>Recent Searches</span>
+            <i class="fas fa-trash-alt" id="clear-history"></i>
+        </div>
+        <div class="history-list"></div>
+    </div>
+
+    <div class="settings-modal">
+        <div class="settings-header">
+            <h2>Configuración</h2>
+            <button class="close-settings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="settings-section">
+            <h3>Apariencia</h3>
+            <div class="settings-option">
+                <input type="checkbox" id="animations-toggle">
+                <label for="animations-toggle">Animaciones</label>
+            </div>
+            <div class="settings-option">
+                <label for="theme-select">Tema</label>
+                <select id="theme-select">
+                    <option value="auto">Auto</option>
+                    <option value="light">Claro</option>
+                    <option value="dark">Oscuro</option>
+                </select>
+            </div>
+            <div class="settings-option">
+                <label for="font-size">Tamaño de fuente</label>
+                <input type="number" id="font-size" min="12" max="24" value="16">
+            </div>
+            <div class="settings-option">
+                <label for="font-family">Familia de fuente</label>
+                <select id="font-family">
+                    <option value="sans-serif">Sans-serif</option>
+                    <option value="serif">Serif</option>
+                    <option value="monospace">Monospace</option>
+                </select>
+            </div>
+        </div>
+        <div class="settings-section">
+            <h3>Búsqueda</h3>
+            <div class="settings-option">
+                <input type="checkbox" id="new-tab-toggle">
+                <label for="new-tab-toggle">Abrir en nueva pestaña</label>
+            </div>
+            <div class="settings-option">
+                <label for="default-engine">Motor predeterminado</label>
+                <select id="default-engine">
+                    <option value="google">Google</option>
+                    <option value="bing">Bing</option>
+                    <option value="duckduckgo">DuckDuckGo</option>
+                    <option value="aol">AOL</option>
+                    <option value="ask">Ask</option>
+                    <option value="qwant">Qwant</option>
+                    <option value="swisscows">Swisscows</option>
+                    <!-- Nuevos motores -->
+                    <option value="ecosia">Ecosia</option>
+                    <option value="startpage">Startpage</option>
+                    <option value="mojeek">Mojeek</option>
+                    <option value="yippy">Yippy</option>
+                </select>
+            </div>
+            <div class="settings-option">
+                <label for="suggestions-limit">Máximo de sugerencias</label>
+                <input type="number" id="suggestions-limit" min="3" max="10">
+            </div>
+            <div class="settings-option">
+                <input type="checkbox" id="autocorrect-toggle">
+                <label for="autocorrect-toggle">Autocorrección</label>
+            </div>
+            <div class="settings-option">
+                <input type="checkbox" id="auto-click-toggle" checked>
+                <label for="auto-click-toggle">Activar auto-click</label>
+            </div>
+        </div>
+        <div class="settings-section">
+            <h3>Privacidad</h3>
+            <div class="settings-option">
+                <input type="checkbox" id="save-history-toggle">
+                <label for="save-history-toggle">Guardar historial de búsqueda</label>
+            </div>
+            <div class="settings-option">
+                <input type="checkbox" id="use-location-toggle">
+                <label for="use-location-toggle">Usar mi ubicación</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for selecting search engines -->
+    <div class="engine-selection-modal">
+        <div class="engine-selection-header">
+            <h2>Seleccionar Motores de Búsqueda</h2>
+            <button class="close-engine-selection">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="engine-selection-list">
+            <div class="engine-option" id="engine-google-option">
+                <!-- Se usan checkboxes para selección múltiple -->
+                <input type="checkbox" id="engine-google" data-engine="google" checked>
+                <label for="engine-google"><i class="fab fa-google"></i> Google</label>
+            </div>
+            <div class="engine-option" id="engine-bing-option">
+                <input type="checkbox" id="engine-bing" data-engine="bing" checked>
+                <label for="engine-bing"><i class="fab fa-microsoft"></i> Bing</label>
+            </div>
+            <div class="engine-option" id="engine-duckduckgo-option">
+                <input type="checkbox" id="engine-duckduckgo" data-engine="duckduckgo" checked>
+                <label for="engine-duckduckgo"><i class="fas fa-duck"></i> DuckDuckGo</label>
+            </div>
+            <div class="engine-option" id="engine-yahoo-option">
+                <input type="checkbox" id="engine-yahoo" data-engine="yahoo">
+                <label for="engine-yahoo"><i class="fab fa-yahoo"></i> Yahoo</label>
+            </div>
+            <div class="engine-option" id="engine-baido-option">
+                <input type="checkbox" id="engine-baido" data-engine="baidu">
+                <label for="engine-baido"><i class="fab fa-baidu"></i> Baidu</label>
+            </div>
+            <div class="engine-option" id="engine-yandex-option">
+                <input type="checkbox" id="engine-yandex" data-engine="yandex">
+                <label for="engine-yandex"><i class="fab fa-yandex"></i> Yandex</label>
+            </div>
+            <!-- Nuevas opciones -->
+            <div class="engine-option" id="engine-aol-option">
+                <input type="checkbox" id="engine-aol" data-engine="aol">
+                <label for="engine-aol"><i class="fas fa-comment-dots"></i> AOL</label>
+            </div>
+            <div class="engine-option" id="engine-ask-option">
+                <input type="checkbox" id="engine-ask" data-engine="ask">
+                <label for="engine-ask"><i class="fas fa-question-circle"></i> Ask</label>
+            </div>
+            <div class="engine-option" id="engine-qwant-option">
+                <input type="checkbox" id="engine-qwant" data-engine="qwant">
+                <label for="engine-qwant"><i class="fas fa-globe"></i> Qwant</label>
+            </div>
+            <div class="engine-option" id="engine-swisscows-option">
+                <input type="checkbox" id="engine-swisscows" data-engine="swisscows">
+                <label for="engine-swisscows"><i class="fas fa-cube"></i> Swisscows</label>
+            </div>
+            <div class="engine-option" id="engine-ecosia-option">
+                <input type="checkbox" id="engine-ecosia" data-engine="ecosia">
+                <label for="engine-ecosia"><i class="fas fa-leaf"></i> Ecosia</label>
+            </div>
+            <div class="engine-option" id="engine-startpage-option">
+                <input type="checkbox" id="engine-startpage" data-engine="startpage">
+                <label for="engine-startpage"><i class="fas fa-compass"></i> Startpage</label>
+            </div>
+            <div class="engine-option" id="engine-mojeek-option">
+                <input type="checkbox" id="engine-mojeek" data-engine="mojeek">
+                <label for="engine-mojeek"><i class="fas fa-search-plus"></i> Mojeek</label>
+            </div>
+            <div class="engine-option" id="engine-yippy-option">
+                <input type="checkbox" id="engine-yippy" data-engine="yippy">
+                <label for="engine-yippy"><i class="fas fa-dice"></i> Yippy</label>
+            </div>
+        </div>
+        <button class="save-engine-selection">Guardar</button>
+    </div>
+
+    <div class="modal-overlay"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
